@@ -1,0 +1,114 @@
+﻿B4J=true
+Group=Default Group
+ModulesStructureVersion=1
+Type=Class
+Version=9.8
+@EndOfDesignText@
+Sub Class_Globals
+	Private JWT As JavaObject
+	Private ALG As JavaObject
+	Private builder As JavaObject
+	Private verifier As JavaObject
+	Private m_Token As Object
+	Private m_Initialized As Boolean
+End Sub
+
+Public Sub Initialize (Algorithm As String, Secret As String, Base64Encode As Boolean)
+	Private SupportedAlgorithms As List = Array As String("HMAC256", "HMAC384", "HMAC512")
+	If SupportedAlgorithms.IndexOf(Algorithm) > -1 Then
+		Algorithm = Algorithm.ToUpperCase
+	Else
+		'Algorithm = "HMAC256"
+		Log("Algorithm not supported")
+		Return
+	End If
+	If Base64Encode Then
+		Dim su As StringUtils
+		Secret = su.EncodeBase64(Secret.GetBytes("UTF8"))
+	End If
+	Private AO As JavaObject
+	AO.InitializeStatic("com.auth0.jwt.algorithms.Algorithm")
+	ALG = AO.RunMethod(Algorithm, Array(Secret))
+	
+	JWT.InitializeStatic("com.auth0.jwt.JWT")
+	builder = JWT.RunMethodJO("create", Null)
+	verifier = JWT.RunMethodJO("require", Array(ALG)).RunMethodJO("build", Null)
+	m_Initialized = True
+End Sub
+
+Public Sub IsInitialized As Boolean
+	Return m_Initialized
+End Sub
+
+Public Sub withIssuer (Issuer As String)
+	builder.RunMethodJO("withIssuer", Array(Issuer))
+End Sub
+
+Public Sub withClaim (claim As Map)
+	For Each Key In claim.Keys
+		builder.RunMethodJO("withClaim", Array(Key, claim.Get(Key)))
+	Next
+End Sub
+
+Public Sub withExpiresAt (Date As Long)
+	Dim NativeMe As JavaObject = Me
+	Dim dt As Object = NativeMe.RunMethod("JavaDate", Array(Date))
+	builder.RunMethodJO("withExpiresAt", Array(dt))
+End Sub
+
+Public Sub getToken As String
+	Return m_Token
+End Sub
+
+Public Sub setToken (Token As String)
+	m_Token = Token
+End Sub
+
+Public Sub Sign
+	m_Token = builder.RunMethodJO("sign", Array(ALG))
+End Sub
+
+Public Sub Verify As JavaObject
+	Try
+		Return verifier.RunMethod("verify", Array(m_Token))
+	Catch
+		Log(LastException)
+	End Try
+	Return Null
+End Sub
+
+Public Sub exp As Object
+	Try
+		Return Verify.RunMethod("getExpiresAt", Null)
+	Catch
+		Log(LastException)
+	End Try
+	Return Null
+End Sub
+
+Public Sub claims As Object
+	Try
+		Return Verify.RunMethod("getClaims", Null)
+	Catch
+		Log(LastException)
+	End Try
+	Return Null
+End Sub
+
+Public Sub getClaimByKey (Key As String) As Object
+	Try
+		Return Verify.RunMethodJO("getClaims", Null).RunMethodJO("get", Array(Key))
+	Catch
+		Log(LastException)
+	End Try
+	Return Null
+End Sub
+
+#If Java
+import java.util.Date;
+
+public Date JavaDate(Long value)
+{
+	return new Date(value);
+}
+#End If

@@ -1,0 +1,62 @@
+﻿AppType=StandardJava
+Build1=Default,b4j.example
+Group=Default Group
+Library1=javaobject
+Library2=jcore
+Library3=jstringutils
+Module1=JSONWebToken
+NumberOfFiles=0
+NumberOfLibraries=3
+NumberOfModules=1
+Version=9.8
+@EndOfDesignText@
+'Non-UI application (console / server application)
+#Region Project Attributes 
+	#CommandLineArgs:
+	#MergeLibraries: True 
+#End Region
+#AdditionalJar: java-jwt-4.0.0
+#AdditionalJar: jackson-core-2.13.3
+#AdditionalJar: jackson-databind-2.13.3
+#AdditionalJar: jackson-annotations-2.13.3
+
+Sub Process_Globals
+	Dim jwt As JSONWebToken
+End Sub
+
+Sub AppStart (Args() As String)
+	jwt.Initialize("HMAC256", "my-jwt-secret-key", False)
+	'jwt.Initialize("RSA256", "my-jwt-secret-key", True)
+	
+	If jwt.IsInitialized Then
+		Dim generatedToken As String = CreateAndSignToken
+		Log( generatedToken )
+	
+		'Dim generatedToken As String = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDb21wdXRlcmlzZSIsImlzQWRtaW4iOnRydWUsImV4cCI6MTY1OTQ2NDMxOSwidXNlciI6IkFlcmljIn0.Lmh4ZjiK89dV5B_FLu51pqCKKf_SdraZKPDitNK_Df0"
+		VerifyAndGetClaims(generatedToken)
+	Else
+		'Log("JWT is not initialized")
+		Return
+	End If
+	StartMessageLoop
+End Sub
+
+Sub CreateAndSignToken As String
+	jwt.withIssuer("Computerise")
+	jwt.withClaim(CreateMap("user": "Aeric", "isAdmin": True))
+	jwt.withExpiresAt(DateTime.Now + 180000)
+	jwt.Sign
+	Return jwt.Token
+End Sub
+
+Sub VerifyAndGetClaims (Token As String)
+	jwt.Token = Token
+	Dim ExpDate As String = jwt.exp
+	Log( ExpDate )
+	
+	Dim claims As Object = jwt.claims
+	Log( claims )
+	
+	Dim issuer As Object = jwt.getClaimByKey("iss")
+	Log( issuer )
+End Sub
