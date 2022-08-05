@@ -26,13 +26,10 @@ End Sub
 
 Sub AppStart (Args() As String)
 	jwt.Initialize("HMAC256", "my-jwt-secret-key", False)
-	'jwt.Initialize("RSA256", "my-jwt-secret-key", True)
 	
 	If jwt.IsInitialized Then
 		Dim generatedToken As String = CreateAndSignToken
 		Log( generatedToken )
-	
-		'Dim generatedToken As String = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDb21wdXRlcmlzZSIsImlzQWRtaW4iOnRydWUsImV4cCI6MTY1OTQ2NDMxOSwidXNlciI6IkFlcmljIn0.Lmh4ZjiK89dV5B_FLu51pqCKKf_SdraZKPDitNK_Df0"
 		VerifyAndGetClaims(generatedToken)
 	Else
 		'Log("JWT is not initialized")
@@ -50,13 +47,23 @@ Sub CreateAndSignToken As String
 End Sub
 
 Sub VerifyAndGetClaims (Token As String)
-	jwt.Token = Token
-	Dim ExpDate As String = jwt.exp
-	Log( ExpDate )
+	jwt.Token = Token 			' Valid token
+'	jwt.Token = Token & "e" 	' Invalid token
 	
-	Dim claims As Object = jwt.claims
-	Log( claims )
+	jwt.Verify
+	'Log( jwt.Verified )
 	
-	Dim issuer As Object = jwt.getClaimByKey("iss")
-	Log( issuer )
+	If jwt.Verified Then
+		Dim ExpDate As String = jwt.exp
+		Log( ExpDate )
+	
+		Dim claims As Object = jwt.claims
+		Log( claims )
+	
+		Dim issuer As Object = jwt.getClaimByKey("iss")
+		Log( issuer )
+		
+		Dim isAdmin As Object = jwt.getClaimByKey("isAdmin")
+		Log( isAdmin )
+	End If
 End Sub

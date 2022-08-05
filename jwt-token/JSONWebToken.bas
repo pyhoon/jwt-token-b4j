@@ -11,6 +11,7 @@ Sub Class_Globals
 	Private verifier As JavaObject
 	Private m_Token As Object
 	Private m_Initialized As Boolean
+	Private m_Verified As Boolean
 End Sub
 
 Public Sub Initialize (Algorithm As String, Secret As String, Base64Encode As Boolean)
@@ -70,11 +71,18 @@ End Sub
 
 Public Sub Verify As JavaObject
 	Try
-		Return verifier.RunMethod("verify", Array(m_Token))
+		Dim jo As JavaObject
+		jo = verifier.RunMethod("verify", Array(m_Token))
+		m_Verified = True
 	Catch
-		Log(LastException)
+		'Log(LastException)
+		m_Verified = False
 	End Try
-	Return Null
+	Return jo
+End Sub
+
+Public Sub getVerified As Boolean
+	Return m_Verified
 End Sub
 
 Public Sub exp As Object
@@ -97,7 +105,7 @@ End Sub
 
 Public Sub getClaimByKey (Key As String) As Object
 	Try
-		Return Verify.RunMethodJO("getClaims", Null).RunMethodJO("get", Array(Key))
+		Return claims.As(Map).Get(Key)
 	Catch
 		Log(LastException)
 	End Try
