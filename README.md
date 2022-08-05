@@ -13,18 +13,24 @@ jwt.withIssuer("Computerise")
 jwt.withClaim(CreateMap("user": "Aeric", "isAdmin": True))
 jwt.withExpiresAt(DateTime.Now + 180000)
 jwt.Sign
-Return jwt.Token
+Log( jwt.Token )
 ```
 
 ## Verify and get Claims/Payload
 ```
 jwt.Token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJDb21..."
-Dim ExpDate As String = jwt.exp
-Log( ExpDate )
+
+jwt.Verify
+'Log( jwt.Verified )
 	
-Dim claims As Object = jwt.claims
-Log( claims )
+If jwt.Verified Then
+	Dim ExpDate As String = jwt.exp
+	Log( ExpDate )
 	
-Dim issuer As Object = jwt.getClaimByKey("iss")
-Log( issuer )
+	Dim claims As Object = jwt.claims
+	Log( claims )
+	
+	Dim issuer As Object = jwt.getClaimByKey("iss")
+	Log( issuer )
+End If
 ```
