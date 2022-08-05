@@ -12,6 +12,7 @@ Sub Class_Globals
 	Private m_Token As Object
 	Private m_Initialized As Boolean
 	Private m_Verified As Boolean
+	Private m_Exception As String
 End Sub
 
 Public Sub Initialize (Algorithm As String, Secret As String, Base64Encode As Boolean)
@@ -19,17 +20,17 @@ Public Sub Initialize (Algorithm As String, Secret As String, Base64Encode As Bo
 	If SupportedAlgorithms.IndexOf(Algorithm) > -1 Then
 		Algorithm = Algorithm.ToUpperCase
 	Else
-		'Algorithm = "HMAC256"
 		Log("Algorithm not supported")
 		Return
 	End If
 	If Base64Encode Then
 		Dim su As StringUtils
 		Secret = su.EncodeBase64(Secret.GetBytes("UTF8"))
+		'Log ( Secret )
 	End If
 	Private AO As JavaObject
 	AO.InitializeStatic("com.auth0.jwt.algorithms.Algorithm")
-	ALG = AO.RunMethod(Algorithm, Array(Secret))
+	ALG = AO.RunMethod(Algorithm, Array As String(Secret))
 	
 	JWT.InitializeStatic("com.auth0.jwt.JWT")
 	builder = JWT.RunMethodJO("create", Null)
@@ -76,6 +77,7 @@ Public Sub Verify As JavaObject
 		m_Verified = True
 	Catch
 		'Log(LastException)
+		m_Exception = LastException.Message
 		m_Verified = False
 	End Try
 	Return jo
@@ -83,6 +85,10 @@ End Sub
 
 Public Sub getVerified As Boolean
 	Return m_Verified
+End Sub
+
+Public Sub getError As String
+	Return m_Exception
 End Sub
 
 Public Sub exp As Object
