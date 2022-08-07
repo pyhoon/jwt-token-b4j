@@ -24,7 +24,7 @@ Public Sub Initialize (Algorithm As String, Secret As String, Base64Encode As Bo
 		Return
 	End If
 	If Base64Encode Then
-		Dim su As StringUtils
+		Private su As StringUtils
 		Secret = su.EncodeBase64(Secret.GetBytes("UTF8"))
 		'Log ( Secret )
 	End If
@@ -53,8 +53,8 @@ Public Sub withClaim (claim As Map)
 End Sub
 
 Public Sub withExpiresAt (Date As Long)
-	Dim NativeMe As JavaObject = Me
-	Dim dt As Object = NativeMe.RunMethod("JavaDate", Array(Date))
+	Private jo As JavaObject
+	Private dt As Object = jo.InitializeNewInstance("java.util.Date", Array(Date))
 	builder.RunMethodJO("withExpiresAt", Array(dt))
 End Sub
 
@@ -72,7 +72,7 @@ End Sub
 
 Public Sub Verify As JavaObject
 	Try
-		Dim jo As JavaObject
+		Private jo As JavaObject
 		jo = verifier.RunMethod("verify", Array(m_Token))
 		m_Verified = True
 	Catch
@@ -117,12 +117,3 @@ Public Sub getClaimByKey (Key As String) As Object
 	End Try
 	Return Null
 End Sub
-
-#If Java
-import java.util.Date;
-
-public Date JavaDate(Long value)
-{
-	return new Date(value);
-}
-#End If
