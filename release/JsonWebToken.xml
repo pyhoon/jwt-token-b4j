@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <doclet-version-NOT-library-version>1.00</doclet-version-NOT-library-version>
+  <b4x_version>10.50</b4x_version>
+  <dependsOn>javaobject</dependsOn>
+  <dependsOn>jcore</dependsOn>
+  <dependsOn>jstringutils</dependsOn>
+  <dependsOn>java-jwt-4.5.2</dependsOn>
+  <dependsOn>jackson-core-2.21.5</dependsOn>
+  <dependsOn>jackson-databind-2.21.5</dependsOn>
+  <dependsOn>jackson-annotations-2.21</dependsOn>
+  <class>
+    <name>com.puterise.jsonwebtoken</name>
+    <shortname>JsonWebToken</shortname>
+    <comment>Based on: https://github.com/auth0/java-jwt
+Additional Libraries: JavaObject, jStringUtils
+</comment>
+    <method>
+      <name DesignerName="IsInitialized">_isinitialized</name>
+      <returntype>boolean</returntype>
+    </method>
+    <method>
+      <name DesignerName="Class_Globals">_class_globals</name>
+      <returntype>String</returntype>
+    </method>
+    <method>
+      <name DesignerName="getClaims" HideFromIDE="true">_getclaims</name>
+      <returntype>anywheresoftware.b4a.objects.collections.Map</returntype>
+    </method>
+    <method>
+      <name DesignerName="getError" HideFromIDE="true">_geterror</name>
+      <returntype>String</returntype>
+    </method>
+    <method>
+      <name DesignerName="getExpiresAt" HideFromIDE="true">_getexpiresat</name>
+      <returntype>Object</returntype>
+    </method>
+    <method>
+      <name DesignerName="getIssuer" HideFromIDE="true">_getissuer</name>
+      <returntype>String</returntype>
+    </method>
+    <method>
+      <name DesignerName="getNotBefore" HideFromIDE="true">_getnotbefore</name>
+      <returntype>Object</returntype>
+    </method>
+    <method>
+      <name DesignerName="getToken" HideFromIDE="true">_gettoken</name>
+      <returntype>String</returntype>
+    </method>
+    <method>
+      <name DesignerName="getVerified" HideFromIDE="true">_getverified</name>
+      <returntype>boolean</returntype>
+    </method>
+    <method>
+      <name DesignerName="Initialize">_initialize</name>
+      <returntype>String</returntype>
+      <parameter>
+        <name>ba</name>
+        <type>anywheresoftware.b4a.BA</type>
+      </parameter>
+      <parameter>
+        <name>Algorithm</name>
+        <type>String</type>
+      </parameter>
+      <parameter>
+        <name>Secret</name>
+        <type>String</type>
+      </parameter>
+      <parameter>
+        <name>Base64Encode</name>
+        <type>boolean</type>
+      </parameter>
+    </method>
+    <method>
+      <name DesignerName="ReadClaim">_readclaim</name>
+      <returntype>Object</returntype>
+      <parameter>
+        <name>Key</name>
+        <type>String</type>
+      </parameter>
+    </method>
+    <method>
+      <name DesignerName="setClaims" HideFromIDE="true">_setclaims</name>
+      <returntype>String</returntype>
+      <parameter>
+        <name>Claims</name>
+        <type>anywheresoftware.b4a.objects.collections.Map</type>
+      </parameter>
+    </method>
+    <method>
+      <name DesignerName="setExpiresAt" HideFromIDE="true">_setexpiresat</name>
+      <returntype>String</returntype>
+      <parameter>
+        <name>ExpiresAt</name>
+        <type>Object</type>
+      </parameter>
+    </method>
+    <method>
+      <name DesignerName="setIssuedAt" HideFromIDE="true">_setissuedat</name>
+      <returntype>String</returntype>
+      <parameter>
+        <name>IssuedAt</name>
+        <type>Object</type>
+      </parameter>
+    </method>
+    <method>
+      <name DesignerName="setIssuer" HideFromIDE="true">_setissuer</name>
+      <returntype>String</returntype>
+      <parameter>
+        <name>Issuer</name>
+        <type>String</type>
+      </parameter>
+    </method>
+    <method>
+      <name DesignerName="setToken" HideFromIDE="true">_settoken</name>
+      <returntype>String</returntype>
+      <parameter>
+        <name>Token</name>
+        <type>String</type>
+      </parameter>
+    </method>
+    <method>
+      <name DesignerName="Sign">_sign</name>
+      <returntype>String</returntype>
+    </method>
+    <method>
+      <name DesignerName="Verify">_verify</name>
+      <returntype>anywheresoftware.b4j.object.JavaObject</returntype>
+    </method>
+    <property>
+      <name DesignerName="Claims">_claims</name>
+      <returntype>anywheresoftware.b4a.objects.collections.Map</returntype>
+      <parameter>
+        <name>Value</name>
+        <type>anywheresoftware.b4a.objects.collections.Map</type>
+      </parameter>
+    </property>
+    <property>
+      <name DesignerName="Error">_error</name>
+      <returntype>String</returntype>
+    </property>
+    <property>
+      <name DesignerName="ExpiresAt">_expiresat</name>
+      <returntype>Object</returntype>
+      <parameter>
+        <name>Value</name>
+        <type>Object</type>
+      </parameter>
+    </property>
+    <property>
+      <name DesignerName="Issuer">_issuer</name>
+      <returntype>String</returntype>
+      <parameter>
+        <name>Value</name>
+        <type>String</type>
+      </parameter>
+    </property>
+    <property>
+      <name DesignerName="NotBefore">_notbefore</name>
+      <returntype>Object</returntype>
+    </property>
+    <property>
+      <name DesignerName="Token">_token</name>
+      <returntype>String</returntype>
+      <parameter>
+        <name>Value</name>
+        <type>String</type>
+      </parameter>
+    </property>
+    <property>
+      <name DesignerName="Verified">_verified</name>
+      <returntype>boolean</returntype>
+    </property>
+    <property>
+      <name DesignerName="IssuedAt">_issuedat</name>
+      <returntype>void</returntype>
+      <parameter>
+        <name>Value</name>
+        <type>Object</type>
+      </parameter>
+    </property>
+  </class>
+  <version>2.21</version>
+  <author>Aeric Poon</author>
+</root>
