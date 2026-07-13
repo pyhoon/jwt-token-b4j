@@ -1,0 +1,93 @@
+﻿AppType=StandardJava
+Build1=Default,com.puterise
+Group=App
+Library1=javaobject
+Library2=jcore
+Library3=jstringutils
+Module1=JsonWebToken
+NumberOfFiles=0
+NumberOfLibraries=3
+NumberOfModules=1
+Version=10.5
+@EndOfDesignText@
+'Non-UI application (console / server application)
+'Stop using JWTs! https://gist.github.com/samsch/0d1f3d3b4745d778f78b230cf6061452
+'YouTube https://www.youtube.com/watch?v=pYeekwv3vC4
+#Region Project Attributes 
+	#CommandLineArgs:
+	#MergeLibraries: True
+	#LibraryName: JsonWebToken
+	#LibraryVersion: 2.21
+	#LibraryAuthor: Aeric Poon
+	#AdditionalJar: java-jwt-4.5.2
+	#AdditionalJar: jackson-core-2.21.5
+	#AdditionalJar: jackson-databind-2.21.5
+	#AdditionalJar: jackson-annotations-2.21
+'	#AdditionalJar: java-jwt-4.4.0
+'	#AdditionalJar: jackson-core-2.18.0
+'	#AdditionalJar: jackson-databind-2.18.0
+'	#AdditionalJar: jackson-annotations-2.18.0
+#End Region
+
+Sub Process_Globals
+	Dim jwt1 As JsonWebToken
+	Dim jwt2 As JsonWebToken
+End Sub
+
+Sub AppStart (Args() As String)
+	ConfigureToken
+End Sub
+
+#Region ConfigureJWTToken
+Public Sub ConfigureToken
+	' Generate a token
+	Dim secret1 As String = "secret"
+	jwt1.Initialize("HMAC256", secret1, False)
+	Dim generatedToken As String = CreateAndSignToken
+	Log( generatedToken )
+	File.WriteString(File.DirApp, "token", generatedToken)
+	If jwt1.IsInitialized Then
+		Dim parts() As String
+		parts = Regex.Split("\.", generatedToken)
+		For Each part As String In parts
+			Log( part )
+		Next
+	End If
+  
+  	Dim readtoken As String = File.ReadString(File.DirApp, "token")
+	Log(readtoken)
+	  
+	' Verify the token
+	Dim secret2 As String = "secret" ' secret2 should be same as secret1 otherwise verification will failed
+	jwt2.Initialize("HMAC256", secret2, False)
+	VerifyAndGetClaims(readtoken)
+End Sub
+#End Region
+
+Sub CreateAndSignToken As String
+	jwt1.Issuer = "Computerise"
+	jwt1.Claims = CreateMap("user": "Aeric", "isAdmin": True)
+	jwt1.ExpiresAt = DateTime.Now + 180000
+	jwt1.Sign
+	Return jwt1.Token
+End Sub
+
+Sub VerifyAndGetClaims (Token As String)
+	jwt2.Token = Token
+	jwt2.Verify
+	If jwt2.Verified Then
+		Dim ExpDate As String = jwt2.ExpiresAt
+		Log( ExpDate )
+  
+		Dim claims As Object = jwt2.Claims
+		Log( claims )
+  
+		Dim issuer As Object = jwt2.Issuer
+		Log( issuer )
+      
+		Dim isAdmin As Object = jwt2.ReadClaim("isAdmin")
+		Log( isAdmin )
+	Else
+		LogError( jwt2.Error )
+	End If
+End Sub
