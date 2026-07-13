@@ -49,7 +49,7 @@ Please add the following AdditionalJars in Main:
 #AdditionalJar: jackson-annotations-2.21
 ```
 
-Download links:
+Download links: \
 https://repo1.maven.org/maven2/com/auth0/java-jwt/4.5.2/java-jwt-4.5.2.jar
 https://repo1.maven.org/maven2/com/...e/jackson-core/2.21.5/jackson-core-2.21.5.jar
 https://repo1.maven.org/maven2/com/...n-databind/2.21.5/jackson-databind-2.21.5.jar
